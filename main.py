@@ -9,7 +9,7 @@ from optic_params import Trans_Intensity
 initial_ro = 0.9     # Коэффициент отражения
 initial_f = 3e12     # Частота (Гц)
 initial_n_real = 1.2  # Действительная часть
-initial_n_imag = 0.0  # Мнимая часть (начальное значение)
+initial_n_imag = 0.0  # Мнимая часть
 initial_d = 3e-5     # Толщина плёнки (м)
 
 fig, ax = plt.subplots()
