@@ -20,7 +20,7 @@ class Trans_Intensity:
     
     def __call__(self, delta: np.ndarray) -> np.ndarray:
         phase = (2 * np.pi * self.f / constants.c) * (delta + self.d * self.n)
-        return self.A / (1 + self.F * np.sin(phase)**2)
+        return 1 / (1 + self.F * np.sin(phase)**2)
     
     def get_intensity(self, delta: np.ndarray) -> np.ndarray:
         return self(delta)
