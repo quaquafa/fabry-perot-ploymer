@@ -69,9 +69,9 @@ slider_kappa = Slider(
     ax=ax_kappa,
     label='Коэффициент поглощения',
     valmin=0,
-    valmax=1,
+    valmax=0.01,
     valinit=initial_kappa,
-    valstep=0.1
+    valstep=0.001
 )
 
 slider_d = Slider(
