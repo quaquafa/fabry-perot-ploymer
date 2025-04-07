@@ -29,5 +29,5 @@ class Trans_Intensity:
         self.A = np.exp(-4 * np.pi * self.kappa * self.d * self.f / constants.c)
         self.R_absorb = self.R * self.A
 
-    def update_F(self):
+    def update_F(self):        
         self.F = 4 * self.R_absorb / ((1 - self.R_absorb)**2)

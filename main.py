@@ -94,7 +94,7 @@ def save_peaks(event):
     
     with open('peaks.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow(["Пиковые значения Δ (мм)"])
+        writer.writerow(["%Пиковые значения Δ (мм)"])
         for delta in peak_deltas:
             writer.writerow([delta])
     
