@@ -1,2 +1,3 @@
 .qodo
-.csv 
+.csv
+__pycache__
