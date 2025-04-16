@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Cursor, Button
 import csv
 from scipy.signal import find_peaks
+import pandas as pd
 
 from optic_params import Trans_Intensity
+from save_and_read import save_calc, read_data
 
 initial_ro = 0.9     # Коэффициент отражения
 initial_f = 3e12     # Частота (Гц)
@@ -14,6 +16,8 @@ initial_d = 3e-5     # Толщина плёнки (м)
 
 fig, ax = plt.subplots()
 plt.subplots_adjust(left=0.1, right=0.75, bottom=0.4)
+ax.set_xlim([0.1, 1])
+ax.set_ylim([-0.05, 1.05])
 
 trans_intensity = Trans_Intensity(ro=initial_ro, f=initial_f, n=initial_n, kappa=initial_kappa, d=initial_d)
 
@@ -30,13 +34,14 @@ ax.grid(True)
 cursor = Cursor(ax, horizOn=True, vertOn=True, color='r', lw=1)
 
 
-ax_ro = plt.axes([0.2, 0.10, 0.65, 0.03])
 ax_freq = plt.axes([0.2, 0.25, 0.65, 0.03])
 ax_n = plt.axes([0.2, 0.20, 0.65, 0.03])
-ax_kappa = plt.axes([0.2, 0.05, 0.65, 0.03])
 ax_d = plt.axes([0.2, 0.15, 0.65, 0.03])
+ax_ro = plt.axes([0.2, 0.10, 0.65, 0.03])
+ax_kappa = plt.axes([0.2, 0.05, 0.65, 0.03])
 
-ax_print = plt.axes([0.85, 0.6, 0.05, 0.05])
+ax_save = plt.axes([0.85, 0.6, 0.05, 0.05])
+ax_read = plt.axes([0.85, 0.5, 0.05, 0.05])
 
 slider_ro = Slider(
     ax=ax_ro,
@@ -83,25 +88,20 @@ slider_d = Slider(
     valstep=1
 )
 
-button_print = Button(ax_print, 'Печать')
+button_print = Button(ax_save, 'Сохранить')
 
-def save_peaks(event):
-    intensity = trans_intensity.get_intensity(delta_values)
-    
-    peaks, _ = find_peaks(intensity, height=0.5, distance=1000)
-    
-    peak_deltas = delta_values[peaks] * 1e3 
-    
-    with open('peaks.csv', 'w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        writer.writerow(["%Пиковые значения Δ (мм)"])
-        for delta in peak_deltas:
-            writer.writerow([delta])
-    
-    print(f"Записано.")
+button_print.on_clicked(lambda event: save_calc(event, trans_intensity, delta_values))
 
+button_read = Button(ax_read, 'Загрузить')
 
-button_print.on_clicked(save_peaks)
+def read_plot(event):
+    deltas, intensities = read_data() # Пока что только сырая функция read_data(). Необходимо прописать интерфейс обработки данных (Фурье, нормировка, приведение к XO - дельта)
+    ax.plot(deltas[1:], intensities[1:], "r--")
+    ax.set_xlim([0.1, 1])
+    plt.show()
+    
+
+button_read.on_clicked(read_plot)
 
 def update(val):
     trans_intensity.ro = slider_ro.val
